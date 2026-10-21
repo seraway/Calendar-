@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14213d">
+  <meta name="description" content="A simple work task calendar with priorities and recurring tasks.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>Work Tasks Calendar</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">✓</div><div><h1>Work Tasks</h1><p>Calendar & task planner</p></div></div>
+    <button id="installBtn" class="btn btn-quiet hidden" type="button">Install app</button>
+  </header>
+  <main class="layout">
+    <section class="welcome">
+      <div><p class="eyebrow">YOUR WORKSPACE</p><h2>Plan your work.<br><span>Stay on top of it.</span></h2><p class="subtext">Keep recurring checks, one-off jobs, and priorities in one place.</p></div>
+      <button id="newTaskTop" class="btn btn-primary" type="button">＋ New task</button>
+    </section>
+    <section class="stats" aria-label="Task summary">
+      <div class="stat"><span class="stat-label">Open tasks</span><strong id="openCount">0</strong><span class="stat-foot">Still to do</span></div>
+      <div class="stat"><span class="stat-label">High priority</span><strong id="highCount">0</strong><span class="stat-foot">Needs attention</span></div>
+      <div class="stat"><span class="stat-label">Completed today</span><strong id="doneCount">0</strong><span class="stat-foot">Nice work</span></div>
+    </section>
+    <section class="panel">
+      <div class="panel-head">
+        <div><p class="eyebrow">SCHEDULE</p><h2 id="periodTitle">This week</h2></div>
+        <div class="view-controls">
+          <button class="icon-btn" id="prevPeriod" aria-label="Previous period">‹</button>
+          <button class="btn btn-quiet" id="todayBtn">Today</button>
+          <button class="icon-btn" id="nextPeriod" aria-label="Next period">›</button>
+          <select id="viewMode" aria-label="Calendar view"><option value="week">Week</option><option value="month">Month</option><option value="list">List</option></select>
+        </div>
+      </div>
+      <div id="calendar" class="calendar"></div>
+      <div class="legend"><span><i class="dot dot-high"></i>High</span><span><i class="dot dot-medium"></i>Medium</span><span><i class="dot dot-low"></i>Low</span><span><i class="dot dot-done"></i>Completed</span></div>
+    </section>
+    <section class="panel task-panel">
+      <div class="panel-head task-head"><div><p class="eyebrow">TASKS</p><h2 id="selectedTitle">Tasks for today</h2></div>
+        <select id="taskFilter" aria-label="Filter tasks"><option value="open">Open tasks</option><option value="all">All tasks</option><option value="completed">Completed</option><option value="high">High priority</option></select>
+      </div>
+      <div id="taskList" class="task-list"></div>
+      <p class="local-note">🔒 Your tasks are saved on this device. This first version does not sync between devices.</p>
+    </section>
+  </main>
+
+  <dialog id="taskDialog">
+    <form id="taskForm" method="dialog">
+      <div class="dialog-head"><div><p class="eyebrow">TASK DETAILS</p><h2 id="dialogTitle">Create a task</h2></div><button type="button" class="icon-btn" id="closeDialog" aria-label="Close">×</button></div>
+      <input type="hidden" id="taskId">
+      <label for="taskName">Task name <span class="required">*</span></label>
+      <input id="taskName" maxlength="100" placeholder="e.g. Check network alarms" required>
+      <label for="taskDescription">Description <span class="optional">(optional)</span></label>
+      <textarea id="taskDescription" rows="3" maxlength="1000" placeholder="Add notes, steps, location, or details..."></textarea>
+      <div class="two-col">
+        <div><label for="taskDate">Start date</label><input id="taskDate" type="date" required></div>
+        <div><label for="taskPriority">Priority</label><select id="taskPriority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>
+      </div>
+      <label for="repeatType">Repeat</label>
+      <select id="repeatType"><option value="none">One time only</option><option value="daily">Every day</option><option value="weekdays">Monday–Friday</option><option value="weekly">Selected days every week</option><option value="monthly">Every month</option></select>
+      <div id="weekdayPicker" class="weekday-picker hidden">
+        <span class="field-caption">Repeat on</span>
+        <div class="weekday-options">
+          <label><input type="checkbox" value="1"> Mon</label><label><input type="checkbox" value="2"> Tue</label>
+          <label><input type="checkbox" value="3"> Wed</label><label><input type="checkbox" value="4"> Thu</label>
+          <label><input type="checkbox" value="5"> Fri</label><label><input type="checkbox" value="6"> Sat</label>
+          <label><input type="checkbox" value="0"> Sun</label>
+        </div>
+      </div>
+      <div id="monthlyPicker" class="hidden"><label for="monthDay">Day of each month</label><select id="monthDay"></select><p class="hint">For months with fewer days, the last day of that month is used.</p></div>
+      <div class="dialog-actions"><button type="button" class="btn btn-quiet" id="cancelDialog">Cancel</button><button type="submit" class="btn btn-primary">Save task</button></div>
+      <p id="formError" class="error hidden"></p>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <footer><span>Work Tasks Calendar</span><span>Made for your workday</span></footer>
+  <script src="app.js"></script>
+</body>
+</html>
